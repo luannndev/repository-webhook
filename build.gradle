@@ -1,19 +1,34 @@
 plugins {
-    id 'java'
+    id('java')
+    id('application')
+    id('com.github.johnrengelman.shadow') version('7.1.2')
 }
 
 group = 'dev.luan.repository'
-version = '1.0-SNAPSHOT'
+version "$reposiliteVersion"
 
 repositories {
     mavenCentral()
+    maven {
+        name('reposilite-repo')
+        url('https://maven.reposilite.com/releases/')
+    }
+    maven {
+        name('reposilite-snapshots')
+        url('https://maven.reposilite.com/snapshots/')
+    }
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation("club.minnced:discord-webhooks:0.8.2")
+    compileOnly("com.reposilite:reposilite:$reposiliteVersion")
 }
 
-test {
-    useJUnitPlatform()
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier.set('sources')
+}
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier.set('javadoc')
 }
